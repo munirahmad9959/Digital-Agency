@@ -2,7 +2,13 @@ import React from 'react'
 import styles from "./contact.module.css"
 import Image from 'next/image'
 
+export const metadata = {
+  title: "Contact Page",
+  description: "Contact us for any inquiries or questions you may have",
+};
+
 const ContactPage = () => {
+  console.log("it is working on the server-side")
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>
