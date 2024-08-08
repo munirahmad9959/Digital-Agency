@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState } from 'react'
 import styles from "./links.module.css"
 import NavLink from "./navLink/NavLink";
+import { signOut, useSession } from 'next-auth/react'
 
 const links = [
     {
@@ -25,11 +26,10 @@ const links = [
 ]
 
 const Links = () => {
-
     const [open, setOpen] = useState(false)
+    const { data: session } = useSession()
 
-
-    const session = true;
+    // const session = true;
     const isAdmin = true;
 
     return (
@@ -41,12 +41,17 @@ const Links = () => {
                     ))
                 }
                 {
-                    session ? (
+                    session?.user ? (
                         <>
-                            {isAdmin && (
+                            {session.user?.isAdmin && (
                                 <NavLink item={{ title: 'Admin', path: '/admin' }} />
                             )}
-                            <button className={styles.logout}>Logout</button>
+                            <form>
+                                <button className={styles.logout} onClick={(e) => {
+                                    e.preventDefault();     //it is stopping the page from refreshing which is helping to logout sucessfully
+                                    signOut()
+                                }}>Logout</button>
+                            </form>
                         </>
 
                     ) : (
@@ -55,7 +60,7 @@ const Links = () => {
                 }
             </div >
             <Image className={styles.menuButton}
-            src='/menu.png' alt=''
+                src='/menu.png' alt=''
                 width={30} height={30} onClick={() => setOpen(prev => !prev)} />
             {
                 open && <div className={styles.mobileLinks}>
@@ -63,8 +68,9 @@ const Links = () => {
                         <NavLink item={link} key={link.title} />
                     ))}
 
-                </div>}
-        </div>
+                </div>
+            }
+        </div >
     )
 }
 

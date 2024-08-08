@@ -1,10 +1,13 @@
 'use client'
 
+import LoginForm from "@/components/loginForm/LoginForm"
 import { useSession, signIn, signOut } from "next-auth/react"
 import React, { useEffect } from 'react'
+import styles from './login.module.css'
 
 const LoginPage = () => {
   const { data: session } = useSession()
+
 
   useEffect(() => {
     if (session) {
@@ -12,21 +15,23 @@ const LoginPage = () => {
     }
   }, [session])
 
-  if (session) {
-    return (
-      <>
-        Signed in as {session.user.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    )
-  }
 
   return (
-    <div>
-      <form action=''>
-        <button type="button" onClick={() => signIn('github')}>Login with Github</button>
-      </form>
-    </div>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <form action='' >
+          <button type="button" onClick={() => signIn('github')} className={styles.github}>Login with Github</button>
+          {
+            session && (
+              <p>Signed In successfully</p>
+            )
+          }
+        </form>
+
+        <LoginForm />
+      </div>
+
+    </div >
   )
 }
 
