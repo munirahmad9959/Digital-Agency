@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { authConfig } from '@/lib/auth.config';
 import { User } from '@/lib/models';
 import { connectToDb } from '@/lib/utils';
@@ -29,7 +29,7 @@ const login = async (credentials) => {
     }
 };
 
-export const authoptions = NextAuth({
+export const authOptions = NextAuth({
     ...authConfig,
     providers: [
         GitHubProvider({
@@ -77,4 +77,4 @@ export const authoptions = NextAuth({
     }
 });
 
-export { authoptions as GET, authoptions as POST };
+export { authOptions as GET, authOptions as POST };
