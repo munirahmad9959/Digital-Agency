@@ -3,10 +3,10 @@
 import { connectToDb } from "./utils";
 import { Post, User } from "./models";
 import { revalidatePath } from "next/cache";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { signIn } from "next-auth/react";
 
-export const addPost = async (formData) => {
+export const addPost = async (prevState, formData) => {
     const { title, desc, slug, img, userId } = Object.fromEntries(formData);
     try {
         connectToDb();
@@ -21,9 +21,10 @@ export const addPost = async (formData) => {
         await newPost.save()
         console.log("saved to Db post created successfully")
         revalidatePath('/blog')             //it is going to show our fresh data whenever we add new post or data
+        revalidatePath('/admin')
     } catch (error) {
         console.log(`Error occured in actions.js file check for details: ${error}`)
-        return
+        return {error: "Something went wrong!"}
     }
 }
 
@@ -35,6 +36,44 @@ export const deletePost = async (formData) => {
         await Post.findByIdAndDelete(id)
         console.log("Post deleted successfully")
         revalidatePath('/blog')
+        revalidatePath('/admin')
+    }
+    catch (error) {
+        console.log(`Error occured in actions.js file check for details: ${error}`)
+        return
+    }
+}
+
+export const addUser = async (prevState, formData) => {
+    const { username, email, password, img } = Object.fromEntries(formData);
+    try {
+        connectToDb();
+        const newUser = new User({
+            username,
+            email,
+            password,
+            img
+        });
+
+        await newUser.save()
+        console.log("saved to Db post created successfully")
+        revalidatePath('/admin')             //it is going to show our fresh data whenever we add new post or data
+    } catch (error) {
+        console.log(`Error occured in actions.js file check for details: ${error}`)
+        return
+    }
+}
+
+
+export const deleteUser = async (formData) => {
+    const { id } = Object.fromEntries(formData)
+    try {
+        connectToDb();
+
+        await Post.deleteMany({ userId: id })
+        await User.findByIdAndDelete(id)
+        console.log("User deleted successfully")
+        revalidatePath('/admin')
     }
     catch (error) {
         console.log(`Error occured in actions.js file check for details: ${error}`)
@@ -47,7 +86,7 @@ export const register = async (previousState, formData) => {
     const { username, email, password, img, passwordRepeat } = Object.fromEntries(formData);
 
     if (password !== passwordRepeat) {
-        return {error: "Passwords do not match"}
+        return { error: "Passwords do not match" }
     }
 
     try {
@@ -55,7 +94,7 @@ export const register = async (previousState, formData) => {
 
         const user = await User.findOne({ username });
         if (user) {
-            return {error: "Username already exists"}
+            return { error: "Username already exists" }
         }
 
         const salt = await bcrypt.genSalt(10);
