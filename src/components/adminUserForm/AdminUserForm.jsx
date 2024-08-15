@@ -17,7 +17,11 @@ const AdminUserForm = () => {
             <input type="email" name='email' placeholder='Email' />
             <input type="password" name='password' placeholder='Password' />
             <input type="text" name='img' placeholder='Image' />
-            <textarea type="text" name='desc' placeholder='Description' rows={10} />
+            <select name="isAdmin">
+                <option value="false">Is Admin?</option>
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
             <button>Add</button>
             {state && state.error}
         </form>

@@ -8,7 +8,6 @@ export const metadata = {
 };
 
 const ContactPage = () => {
-  console.log("it is working on the server-side")
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>

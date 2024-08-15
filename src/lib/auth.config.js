@@ -5,20 +5,20 @@ export const authConfig = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                console.log('JWT Callback - User:', user);
+                // console.log('JWT Callback - User:', user);
                 token.id = user.id;
                 token.isAdmin = user.isAdmin;
             }
-            console.log('JWT Token:', token);
+            // console.log('JWT Token:', token);
             return token;
         },
         async session({ session, token }) {
-            console.log('Session Callback - Token:', token);
+            // console.log('Session Callback - Token:', token);
             if (token) {
                 session.user.id = token.id;
                 session.user.isAdmin = token.isAdmin;
             }
-            console.log('Session:', session);
+            // console.log('Session:', session);
             return session;
         },
         async authorized({ token, request }) {

@@ -13,10 +13,10 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (session) {
-      console.log("Session data:", session)
-      // router.push("/")
+      // console.log("Session data:", session)
+      router.push("/")
     }
-  }, [session])
+  }, [session, router])
 
 
   return (

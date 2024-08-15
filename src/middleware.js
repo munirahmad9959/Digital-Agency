@@ -8,7 +8,7 @@ export async function middleware(request) {
     const token = await getToken({ req: request, secret });
 
     if (!token) {
-        console.log("No token found, redirecting to login...");
+        // console.log("No token found, redirecting to login...");
         if (request.nextUrl.pathname !== '/login') {
             return NextResponse.redirect(new URL('/login', request.url));
         }
@@ -16,7 +16,7 @@ export async function middleware(request) {
     }
 
     // Token found, print it to the console
-    console.log(`The token of the current session is: ${JSON.stringify(token, null, 2)}`);
+    // console.log(`The token of the current session is: ${JSON.stringify(token, null, 2)}`);
 
     // Example of conditional redirection based on a token property (e.g., user role)
     if (request.nextUrl.pathname.startsWith('/admin') && !token.isAdmin) { // Added: Check for admin access
