@@ -4,7 +4,7 @@ import styles from './admin.module.css'
 import AdminPosts from '@/components/adminPosts/AdminPosts'
 import AdminPostForm from '@/components/adminPostForm/AdminPostForm'
 import AdminUsers from '@/components/adminUsers/AdminUsers'
-import AdminUserForm from '@/components/adminUserForm/adminUserForm'
+import AdminUserForm from '@/components/adminUserForm/AdminUserForm'
 
 const AdminPage = async () => {
 
