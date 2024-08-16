@@ -5,7 +5,7 @@ import PostUser from '@/components/postUser/PostUser'
 import { getPost } from '@/lib/data'
 
 const getData = async (slug) => {
-    const response = await fetch(`http://localhost:3000/api/blog/${slug}`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blog/${slug}`)
     if (!response.ok) {
         throw new Error('Something went wrong')
     }
