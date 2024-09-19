@@ -7,27 +7,30 @@ export async function middleware(request) {
     // Attempt to retrieve the token
     const token = await getToken({ req: request, secret });
 
+    // If no token and the user is trying to access protected routes (not login or register)
     if (!token) {
-        // console.log("No token found, redirecting to login...");
-        if (request.nextUrl.pathname !== '/login') {
+        if (
+            request.nextUrl.pathname !== '/login' && 
+            request.nextUrl.pathname !== '/register'
+        ) {
             return NextResponse.redirect(new URL('/login', request.url));
         }
+        // Allow access to /login and /register if not authenticated
         return NextResponse.next();
     }
 
-    // Token found, print it to the console
-    // console.log(`The token of the current session is: ${JSON.stringify(token, null, 2)}`);
-
-    // Example of conditional redirection based on a token property (e.g., user role)
-    if (request.nextUrl.pathname.startsWith('/admin') && !token.isAdmin) { // Added: Check for admin access
+    // Token found, check for role-based access or redirect authenticated users from login/register
+    if (request.nextUrl.pathname.startsWith('/admin') && !token.isAdmin) {
         return NextResponse.redirect(new URL('/', request.url));
     }
 
-    if (request.nextUrl.pathname === '/login') {
+    // Redirect authenticated users from accessing login or register page
+    if (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register') {
         return NextResponse.redirect(new URL('/', request.url));
     }
 
-    return NextResponse.next();  // Continue with the request if no redirection is needed
+    // Allow access to other pages if authenticated
+    return NextResponse.next();
 }
 
 export const config = {
